@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 import actr
 
@@ -17,30 +18,31 @@ def exp (human=False):
 
     actr.reset()
 
-    items = actr.permute_list(["B","C","D","F","G","H","J","K","L",
-                               "M","N","P","Q","R","S","T","V","W",
-                               "X","Y","Z"])
-    text1 = items[0]
-    window = actr.open_exp_window("Letter recognition hahha")
+    #items = actr.permute_list(["A","B","C","D","0","E","F","G","H"])
+    items = ["P7","P6","C","D","0","E","F","G","H"]
 
-    actr.add_text_to_exp_window(window, text1, x=200, y=150)
+    #text1 = items[1]
+    for text in items:
+        #从测试来看，中文不行啊。
+        cmd = "请将手柄移动至"+text+ "位。"
+        #cmd = text
+        window = actr.open_exp_window("Braking Test Experiment CRH380D")
+        actr.add_text_to_exp_window(window, cmd, x=100, y=150)
+        actr.add_command("brakingtest-key-press",respond_to_key_press,
+                         "Brakingtest task output-key monitor")
+        actr.monitor_command("output-key","brakingtest-key-press")
+        global response
+        response = False
 
-    actr.add_command("demo2-key-press",respond_to_key_press,
-                     "Demo2 task output-key monitor")
-    actr.monitor_command("output-key","demo2-key-press")
+        if human == True:
+            while response == False:
+                actr.process_events()
 
-    global response
-    response = False
+        else:
+            actr.install_device(window)
+            actr.run(10,True)
 
-    if human == True:
-        while response == False:
-            actr.process_events()
-
-    else:
-        actr.install_device(window)
-        actr.run(10,True)
-
-    actr.remove_command_monitor("output-key","demo2-key-press")
-    actr.remove_command("demo2-key-press")
+        actr.remove_command_monitor("output-key","brakingtest-key-press")
+        actr.remove_command("brakingtest-key-press")
 
     return response

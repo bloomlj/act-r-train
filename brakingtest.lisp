@@ -2,11 +2,11 @@
 
 (clear-all)
 
-(define-model demo2
+(define-model brakingtest
 
 (sgp :seed (123456 0))
-(sgp :v t :show-focus t :trace-detail high)
-
+;(sgp :v t :show-focus t :trace-detail high)
+(sgp :v  t :trace-detail high)
 (chunk-type read-letters state)
 (chunk-type array letter)
 
